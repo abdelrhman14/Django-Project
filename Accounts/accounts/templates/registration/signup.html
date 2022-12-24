@@ -1,0 +1,133 @@
+{% extends 'pages/main.html' %}
+{% load static %}
+{% block content %}
+{% load widget_tweaks %}
+<link rel="stylesheet" href="{% static 'css/styles.css' %}" type="text/css">
+<div class="container" style='margin-top: 110 !important;'>
+  <div class="card mb-3">
+    <div class="row g-0">
+      <div class="col-md-4">
+        <img  src="{% static 'images\login.jpg' %}" class="img-fluid" alt="...">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body m-3">
+          <form method="post" action="">
+            {% csrf_token %}      
+            <h2 class='text-center'>Create an Account</h2>
+            <p class="hint-text text-center">Sign up with your social media account or email address</p>
+
+                        <!-- 2 column grid layout for inline styling -->
+                        <div class="row m-1">
+                          <div class="col-6">
+                            <div class="d-grid gap-4 m-2">
+                              <a href="{% url "social:begin" "google-oauth2" %}" class="btn btn-danger" type="submit"><i class="bi bi-google"></i>  GOOGLE </a>
+                            </div>
+                          </div>
+            
+                          <div class="col-6">
+                            <div class="d-grid gap-2 m-2">
+                              <a href="{% url 'social:begin' 'facebook' %}" class="btn btn-primary" type="submit"><i class="bi bi-facebook"></i>  FACBOOK</a>
+                            </div>
+
+                          </div>
+
+
+                        </div>
+                        
+            <div class="divider align-items-center my-2">
+              <p class="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
+            </div>
+
+<!-- Username input -->
+<div class="form-outline m-2">
+  <label class="form-label" for="form2Example1">Username</label>
+  {% render_field form.username class="form-control" type="text" %}
+  {% if form.username.help_text %}
+  <small style="color: grey">{{ form.username.help_text }}</small>
+  {% endif %}
+  {% if form.username.errors %}
+  {{ form.username.errors }}
+  {% endif %}
+</div>
+
+
+
+<!-- First name input -->
+<div class="form-outline m-2">
+  <label class="form-label" for="form2Example1">First name</label>
+  {% render_field form.first_name class="form-control" type="text" %}
+  {% if form.first_name.help_text %}
+  <small style="color: grey">{{ form.first_name.help_text }}</small>
+  {% endif %}
+  {% if form.first_name.errors %}
+  {{ form.first_name.errors }}
+  {% endif %}
+</div>
+
+<!-- Last name input -->
+<div class="form-outline m-2">
+  <label class="form-label" for="form2Example1">Last name</label>
+  {% render_field form.last_name class="form-control" type="text" %}
+  {% if form.last_name.help_text %}
+  <small style="color: grey">{{ form.last_name.help_text }}</small>
+  {% endif %}
+  {% if form.last_name.errors %}
+  {{ form.last_name.errors }}
+  {% endif %}
+</div>
+        
+<!-- Email input -->
+  <div class="form-outline m-2">
+    <label class="form-label" for="form2Example1">Email address</label>
+    {% render_field form.email class="form-control" type="email" %}
+    {% if form.email.help_text %}
+    <small style="color: grey">{{ form.email.help_text }}</small>
+  {% endif %}
+  {% if form.email.errors %}
+  {{ form.email.errors }}
+  {% endif %}
+  </div>
+
+  <!-- Password input -->
+  <div class="form-outline m-2">
+    <label class="form-label" for="form2Example2">Password</label>
+    {% render_field form.password1 class="form-control" type="password" %}
+    {% if form.password1.help_text %}
+      <small style="color: grey">{{ form.password1.help_text }}</small>
+    {% endif %}
+    {% if form.password1.errors %}
+    {{ form.password1.errors }}
+    {% endif %}
+  </div>
+
+
+    <!-- Password confirmation input -->
+    <div class="form-outline m-2">
+      <label class="form-label" for="form2Example2">Password confirmation</label>
+      {% render_field form.password2 class="form-control" type="password" %}
+      {% if form.password2.help_text %}
+        <small style="color: grey">{{ form.password2.help_text }}</small>
+      {% endif %}
+      {% if form.password2.errors %}
+      {{ form.password2.errors }}
+      {% endif %}
+    </div>
+
+
+            <!-- Submit button -->
+            <div class="d-grid gap-2 m-2">
+              <button type="submit" class="btn btn-primary ">Signup</button>
+            </div>
+
+
+
+
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

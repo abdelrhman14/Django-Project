@@ -1,0 +1,8 @@
+{% extends 'pages/main.html' %}
+{% load static %}
+{% block content %}
+<div class="container" style='margin-top: 110 !important;'> 
+  <p>Logged out!</p>
+  <a href="{% url 'login'%}">Click here to login again.</a>
+</div>
+{% endblock %}
