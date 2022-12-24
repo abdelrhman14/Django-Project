@@ -1,0 +1,515 @@
+{% extends 'pages/main.html' %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% block content %}
+<div class="container" style='margin-top: 110 !important; '>
+  <!--Message Part-->
+  {% if messages %}
+    {% for message in messages %} 
+      {% if message.tags %}
+      {% bootstrap_messages message.tags%}</li>
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+  <!--End Message Part-->
+
+  <!--End Part 1-->
+  <div class="row"> 
+    <div class="col-md-3">
+      <div class="card cardindex border-white">
+        <div class="card-body text-dark fw-normal">
+          {%for category in category_list%}
+            <a href={{category.get_category_url}} class="text-decoration-none"><p class='catstyle text-dark'>{{category.CATname}}</p></a>  
+          {%endfor%}
+        </div>
+      </div>
+    </div> 
+    <!--End Part 1-->
+
+    <!--Part 2-->
+    <div class="col-lg-9 col-md-12">
+      <div class="card bg-white text-dark">
+        <div class="card-img-wrap">
+          <img class="card-img-top" src="{% static 'images\product1.jpg' %}"  alt="...">
+          <div class="card-img-overlay m-4">
+            <h6 class="card-title"><span class="badge bg-danger">bestseller</span></h6>
+            <p class="card-text fs-2 fw-bold">The best selling products</p>
+            <p class="card-text">Watch the best selling products now!</p>
+            <a href="#" class="btn-danger btn-sm ">Shop Now</a>
+          </div>
+        </div>        
+
+    </div>
+  </div> 
+  <!--End Part 2-->
+
+  <!--Part 3-->
+  <div class="row mt-5">
+    {%for product in all_product%}
+    <div class="col-md-12 col-lg-3">
+      <div class="card">
+        {%if product.PRdiscount_price > 0%}
+        <div class="badge bg-success text-white position-absolute" style="top: 0.5rem; left: 0.5rem;">Sale</div>
+        <div class="badge btn btn-danger text-white position-absolute" style="top: 2.5rem; left: 0.5rem;"> - {{product.discount_percentage|floatformat:2}}%</div>
+        {%endif%}
+        {%if product.PRnew and product.PRbestseller%}
+        <div class="badge bg-primary text-white position-absolute" style="top: 0.5rem; right: 0.5rem">New</div>
+        <div class="badge bg-secondary text-white position-absolute" style="top: 2.5rem; right: 0.5rem">Bestseller</div>
+        {% elif product.PRnew %}
+        <div class="badge bg-primary text-white position-absolute" style="top: 0.5rem; right: 0.5rem">New</div>
+        {% elif product.PRbestseller %}
+        <div class="badge bg-secondary text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Bestseller</div>
+        {%endif%}
+        <!-- Product image-->
+        {% if product.PRimage %}
+        <a href="{{product.get_product_details_url}}" >
+        <img src="{{product.PRimage.url}}" height="180" width="200" class="card-img" alt="...">
+        </a>
+        {% else %}  
+        <img class="card-img-top" src="{% static 'images\no-image-available-icon-flat-vector-no-image-available-icon-flat-vector-illustration-132482953.webp' %}"  alt="...">
+        {% endif %}
+
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <p class="small"><a href="#!" class="text-muted">{{product.category}}</a></p>
+            {%if product.PRdiscount_price > 0 %}
+            <div class="text-sm-center fw-normal">
+              <span class="text-decoration-line-through text-danger"> $ {{product.PRprice}} EPG </span>
+            </div>
+            {% else %}
+            <div class="text-sm-center fw-normal"><span >No Discount</span></div>
+            {%endif%}
+          </div>
+
+          <div class="d-flex justify-content-between mb-3">
+            <h6 class="mb-0">{{product.PRname}}</h5>
+            {%if product.PRdiscount_price > 0 %}
+            <div class="text-sm-center fw-normal">
+              <span class="text-sm-center fw-normal"> $ {{product.PRdiscount_price}} EPG </span>
+            </div>
+            {% else %}
+            <div class="text-sm-center fw-normal"><span >$ {{product.PRprice}} EPG</span></div>
+              {%endif%}
+        </div>
+
+          <div class="d-flex justify-content-between mb-2">
+            <p class="text-muted mb-0">Available: <span class="fw-bold">{{product.PRnp_available}}</span></p>
+            <div class="ms-auto text-warning">
+              <i class="fa fa-star"></i>
+              <i class="fa fa-star"></i>
+              <i class="fa fa-star"></i>
+              <i class="fa fa-star"></i>
+              <i class="fa fa-star"></i>
+            </div>
+          </div>
+          <a href="{{product.get_add_to_cart_url }}" class="btn btn-light btn-sm">Add to cart  <i class="bi bi-cart2"></i> </a>
+        </div>
+      </div>
+    </div>
+    {%endfor%}
+  </div>
+  <!--End Part3-->
+
+  <!--Part4-->
+  <div class="row mt-4 pt-1">
+    <div class="col-lg-8 col-md-12">
+      <div class="card bg-white text-white">
+        <div class="card-img-wrap">
+          <img src="{% static 'images\head5.jpg' %}" class="cart-image-top" height='360' alt="sample image">
+          <div class="card-img-overlay m-2">
+              <div>
+                <h6 class="card-title"><span class="badge bg-danger">Sale</span></h6>
+                <p class="card-text fs-2 fw-bold">Discounts for all models of the year <span class='fw-bold text-danger'>(2021)</span</p>
+                <p class="card-text">All devices have discounts!</p>
+                <a class="btn btn-danger btn-sm">Shop Now</a>              
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+
+
+
+        <div class="col-lg-4 col-md-12">
+          <div class="card bg-white text-dark">
+            <div class="card-img-wrap">
+            <img src="{% static 'images\redend.jpg' %}" class="cart-image-top" height='360'  alt="sample image">
+            <div class="card-img-overlay m-2">
+                    <h6 class="card-title"><span class="badge bg-danger">New</span></h6>
+                    <p class="card-text fs-4 fw-bold">New products of the year 2022</p>
+                    <p class="card-text " style="width: 12rem;">Find new products here!</p>
+                    <a class="btn btn-danger btn-sm ">Shop Now</a>
+                </div>
+              </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+                  
+    <!--Part 4-->
+    <div class="row mt-5">
+      <div class='col-12'>
+        <p class="fs-5 fw-bold">New products</p>
+      </div>
+      {%for new_product in new_product%}
+      <div class="col-md-12 col-lg-3">
+        <div class="card">
+          {%if new_product.PRdiscount_price > 0%}
+          <div class="badge bg-success text-white position-absolute" style="top: 0.5rem; left: 0.5rem;">Sale</div>
+          <div class="badge btn btn-danger text-white position-absolute" style="top: 2.5rem; left: 0.5rem;"> - {{new_product.discount_percentage|floatformat:2}}%</div>
+          {%endif%}
+          {%if new_product.PRnew and product.PRbestseller%}
+          <div class="badge bg-primary text-white position-absolute" style="top: 0.5rem; right: 0.5rem">New</div>
+          <div class="badge bg-secondary text-white position-absolute" style="top: 2.5rem; right: 0.5rem">Bestseller</div>
+          {% elif new_product.PRnew %}
+          <div class="badge bg-primary text-white position-absolute" style="top: 0.5rem; right: 0.5rem">New</div>
+          {%endif%}
+          <!-- Product image-->
+          {% if new_product.PRimage %}
+          <a href="{{new_product.get_product_details_url}}" >
+            <img src="{{new_product.PRimage.url}}" height="180" width="200" class="card-img" alt="...">
+          </a>
+          {% else %}  
+          <img class="card-img-top" src="{% static 'images\no-image-available-icon-flat-vector-no-image-available-icon-flat-vector-illustration-132482953.webp' %}"  alt="...">
+          {% endif %}
+  
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <p class="small"><a href="#!" class="text-muted">{{new_product.category}}</a></p>
+              {%if product.PRdiscount_price > 0 %}
+              <div class="text-sm-center fw-normal">
+                <span class="text-decoration-line-through text-danger"> $ {{new_product.PRprice}} EPG </span>
+              </div>
+              {% else %}
+              <div class="text-sm-center fw-normal"><span >No Discount</span></div>
+              {%endif%}
+            </div>
+  
+            <div class="d-flex justify-content-between mb-3">
+              <h6 class="mb-0">{{new_product.PRname}}</h5>
+              {%if new_product.PRdiscount_price > 0 %}
+              <div class="text-sm-center fw-normal">
+                <span class="text-sm-center fw-normal"> $ {{new_product.PRdiscount_price}} EPG </span>
+              </div>
+              {% else %}
+              <div class="text-sm-center fw-normal"><span >$ {{new_product.PRprice}} EPG</span></div>
+                {%endif%}
+          </div>
+  
+            <div class="d-flex justify-content-between mb-2">
+              <p class="text-muted mb-0">Available: <span class="fw-bold">{{new_product.PRnp_available}}</span></p>
+              <div class="ms-auto text-warning">
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+              </div>
+            </div>
+            <a href="{{product.get_add_to_cart_url }}" class="btn btn-light btn-sm">Add to cart  <i class="bi bi-cart2"></i> </a>
+          </div>
+        </div>
+      </div>
+      {%endfor%}
+      </div>
+      <!--End Part 4-->
+
+      <!--Part 5-->
+      <div class="row mt-5">
+        <div class='col-12'>
+          <p class="fs-5 fw-bold">Bestseller products</p>
+        </div>
+        {%for bestseller_product in bestseller_product%}
+        <div class="col-md-12 col-lg-3">
+          <div class="card">
+            {%if bestseller_product.PRdiscount_price > 0%}
+            <div class="badge bg-success text-white position-absolute" style="top: 0.5rem; left: 0.5rem;">Sale</div>
+            <div class="badge btn btn-danger text-white position-absolute" style="top: 2.5rem; left: 0.5rem;"> - {{bestseller_product.discount_percentage|floatformat:2}}%</div>
+            {%endif%}
+            {%if bestseller_product.PRnew and bestseller_product.PRbestseller%}
+            <div class="badge bg-primary text-white position-absolute" style="top: 0.5rem; right: 0.5rem">New</div>
+            <div class="badge bg-secondary text-white position-absolute" style="top: 2.5rem; right: 0.5rem">Bestseller</div>
+            {% elif bestseller_product.PRbestseller %}
+            <div class="badge bg-secondary text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Bestseller</div>
+            {%endif%}
+            <!-- Product image-->
+            {% if bestseller_product.PRimage %}
+            <a href="{{bestseller_product.get_product_details_url}}" >
+              <img src="{{bestseller_product.PRimage.url}}" height="180" width="200" class="card-img" alt="...">
+            </a>
+            {% else %}  
+            <img class="card-img-top" src="{% static 'images\no-image-available-icon-flat-vector-no-image-available-icon-flat-vector-illustration-132482953.webp' %}"  alt="...">
+            {% endif %}
+    
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <p class="small"><a href="#!" class="text-muted">{{bestseller_product.category}}</a></p>
+                {%if bestseller_product.PRdiscount_price > 0 %}
+                <div class="text-sm-center fw-normal">
+                  <span class="text-decoration-line-through text-danger"> $ {{bestseller_product.PRprice}} EPG </span>
+                </div>
+                {% else %}
+                <div class="text-sm-center fw-normal"><span >No Discount</span></div>
+                {%endif%}
+              </div>
+    
+              <div class="d-flex justify-content-between mb-3">
+                <h6 class="mb-0">{{bestseller_product.PRname}}</h5>
+                {%if bestseller_product.PRdiscount_price > 0 %}
+                <div class="text-sm-center fw-normal">
+                  <span class="text-sm-center fw-normal"> $ {{bestseller_product.PRdiscount_price}} EPG </span>
+                </div>
+                {% else %}
+                <div class="text-sm-center fw-normal"><span >$ {{bestseller_product.PRprice}} EPG</span></div>
+                  {%endif%}
+            </div>
+    
+              <div class="d-flex justify-content-between mb-2">
+                <p class="text-muted mb-0">Available: <span class="fw-bold">{{bestseller_product.PRnp_available}}</span></p>
+                <div class="ms-auto text-warning">
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                </div>
+              </div>
+              <a href="{{bestseller_product.get_add_to_cart_url }}" class="btn btn-light btn-sm">Add to cart  <i class="bi bi-cart2"></i> </a>
+            </div>
+          </div>
+        </div>
+        {%endfor%}
+        </div>
+    <!--End Part 5-->
+
+<!--Part 6--> 
+<!--Grid row-->
+<div class="row mt-4" >
+  <!--Grid column-->
+  <div class="col-12">
+    <div class="card bg-white text-dark">
+      <div class="card-img-wrap">
+        <img class="card-img-top" src="{% static 'images\ylt.jpg' %}"  height='360' alt="...">
+      <div class="card-img-overlay m-4">
+        <h6 class="card-title"><span class="badge bg-info">Salle</span></h6>
+        <p class="card-text fs-2 fw-bold" style="width: 25rem;">Discounts for all models of the year <span class='fw-bold text-danger'>(2022-2020)</span</p>
+        <p class="card-text">Watch the best selling products now!</p>
+        <a class="btn btn-info btn-sm  text-white">Shop Now</a>
+      </div>
+
+
+    </div>
+</div>
+<!--End Part 6-->
+
+
+<!--Part 7-->
+      <div class="row mt-5">
+        <div class='col-12'>
+          <p class="fs-5 fw-bold">Sale products</p>
+        </div>
+        {%for sale in sale_product%}
+        <div class="col-md-12 col-lg-3">
+          <div class="card">
+            {%if sale.PRdiscount_price > 0%}
+            <div class="badge bg-success text-white position-absolute" style="top: 0.5rem; left: 0.5rem;">Sale</div>
+            <div class="badge btn btn-danger text-white position-absolute" style="top: 2.5rem; left: 0.5rem;"> - {{sale.discount_percentage|floatformat:2}}%</div>
+            {%endif%}
+            {%if sale.PRnew and sale.PRbestseller%}
+            <div class="badge bg-primary text-white position-absolute" style="top: 0.5rem; right: 0.5rem">New</div>
+            <div class="badge bg-secondary text-white position-absolute" style="top: 2.5rem; right: 0.5rem">Bestseller</div>
+            {% elif sale.PRnew %}
+            <div class="badge bg-secondary text-white position-absolute" style="top: 0.5rem; right: 0.5rem">New</div>
+            {% elif sale.PRbestseller %}
+            <div class="badge bg-secondary text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Bestseller</div>
+            {%endif%}
+            <!-- Product image-->
+            {% if sale.PRimage %}
+            <a href="{{sale.get_product_details_url}}" >
+              <img src="{{sale.PRimage.url}}" height="180" width="200" class="card-img" alt="...">
+            </a>
+            {% else %}  
+            <img class="card-img-top" src="{% static 'images\no-image-available-icon-flat-vector-no-image-available-icon-flat-vector-illustration-132482953.webp' %}"  alt="...">
+            {% endif %}
+    
+            <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <p class="small"><a href="#!" class="text-muted">{{sale.category}}</a></p>
+                {%if sale.PRdiscount_price > 0 %}
+                <div class="text-sm-center fw-normal">
+                  <span class="text-decoration-line-through text-danger"> $ {{sale.PRprice}} EPG </span>
+                </div>
+                {% else %}
+                <div class="text-sm-center fw-normal"><span >No Discount</span></div>
+                {%endif%}
+              </div>
+    
+              <div class="d-flex justify-content-between mb-3">
+                <h6 class="mb-0">{{sale.PRname}}</h5>
+                {%if sale.PRdiscount_price > 0 %}
+                <div class="text-sm-center fw-normal">
+                  <span class="text-sm-center fw-normal"> $ {{sale.PRdiscount_price}} EPG </span>
+                </div>
+                {% else %}
+                <div class="text-sm-center fw-normal"><span >$ {{sale.PRprice}} EPG</span></div>
+                  {%endif%}
+            </div>
+    
+              <div class="d-flex justify-content-between mb-2">
+                <p class="text-muted mb-0">Available: <span class="fw-bold">{{sale.PRnp_available}}</span></p>
+                <div class="ms-auto text-warning">
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                  <i class="fa fa-star"></i>
+                </div>
+              </div>
+              <a href="{{sale.get_add_to_cart_url }}" class="btn btn-light btn-sm">Add to cart  <i class="bi bi-cart2"></i> </a>
+            </div>
+          </div>
+        </div>
+        {%endfor%}
+        </div>
+<!--End Part 7-->
+
+
+
+<!--Part 8-->
+<div class="row mt-5">
+  <div class='col-12 '>
+    <p class="fs-5 fw-bold">Last products</p>
+  </div>
+  {%for last_product in last_product%}
+  <div class="col-md-12 col-lg-3">
+    <div class="card">
+      {%if last_product.PRdiscount_price > 0%}
+      <div class="badge bg-success text-white position-absolute" style="top: 0.5rem; left: 0.5rem;">Sale</div>
+      <div class="badge btn btn-danger text-white position-absolute" style="top: 2.5rem; left: 0.5rem;"> - {{last_product.discount_percentage|floatformat:2}}%</div>
+      {%endif%}
+      {%if last_product.PRnew and last_product.PRbestseller%}
+      <div class="badge bg-primary text-white position-absolute" style="top: 0.5rem; right: 0.5rem">New</div>
+      <div class="badge bg-secondary text-white position-absolute" style="top: 2.5rem; right: 0.5rem">Bestseller</div>
+      {% elif last_product.PRnew %}
+      <div class="badge bg-secondary text-white position-absolute" style="top: 0.5rem; right: 0.5rem">New</div>
+      {% elif last_product.PRbestseller %}
+      <div class="badge bg-secondary text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Bestseller</div>
+      {%endif%}
+      <!-- Product image-->
+      {% if last_product.PRimage %}
+      <a href="{{last_product.get_product_details_url}}" >
+        <img src="{{last_product.PRimage.url}}" height="180" width="200" class="card-img" alt="...">
+      </a>
+      {% else %}  
+      <img class="card-img-top" src="{% static 'images\no-image-available-icon-flat-vector-no-image-available-icon-flat-vector-illustration-132482953.webp' %}"  alt="...">
+      {% endif %}
+
+      <div class="card-body">
+        <div class="d-flex justify-content-between">
+          <p class="small"><a href="#!" class="text-muted">{{last_product.category}}</a></p>
+          {%if last_product.PRdiscount_price > 0 %}
+          <div class="text-sm-center fw-normal">
+            <span class="text-decoration-line-through text-danger"> $ {{last_product.PRprice}} EPG </span>
+          </div>
+          {% else %}
+          <div class="text-sm-center fw-normal"><span >No Discount</span></div>
+          {%endif%}
+        </div>
+
+        <div class="d-flex justify-content-between mb-3">
+          <h6 class="mb-0">{{last_product.PRname}}</h5>
+          {%if last_product.PRdiscount_price > 0 %}
+          <div class="text-sm-center fw-normal">
+            <span class="text-sm-center fw-normal"> $ {{last_product.PRdiscount_price}} EPG </span>
+          </div>
+          {% else %}
+          <div class="text-sm-center fw-normal"><span >$ {{last_product.PRprice}} EPG</span></div>
+            {%endif%}
+      </div>
+
+        <div class="d-flex justify-content-between mb-2">
+          <p class="text-muted mb-0">Available: <span class="fw-bold">{{last_product.PRnp_available}}</span></p>
+          <div class="ms-auto text-warning">
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
+            <i class="fa fa-star"></i>
+          </div>
+        </div>
+        <a href="{{last_product.get_add_to_cart_url }}" class="btn btn-light btn-sm">Add to cart  <i class="bi bi-cart2"></i> </a>
+      </div>
+    </div>
+  </div>
+  {%endfor%}
+  </div>
+<!--End Part 8-->
+
+
+      
+</div>
+
+{% endblock content%}
+        
+    
+<!--              
+                       <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+          <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+          <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
+          <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
+          <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="3" aria-label="Slide 3"></button>
+          <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="4" aria-label="Slide 3"></button>
+          <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="5" aria-label="Slide 3"></button>
+          <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="6" aria-label="Slide 3"></button>
+          <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="7" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+          {%for new_product in new_product %}
+            <div class="carousel-item {% if forloop.counter0 == 0%} active {%endif%}"  data-bs-interval="20000">
+          {% if new_product.PRimage %}
+            <img src="{{new_product.PRimage.url}}" class='item'  alt="...">
+          {% endif %}
+            <div class="carousel-caption d-none d-md-block">    
+          {%if new_product.PRnew %}
+            <div class="badge bg-primary text-white position-absolute" style="top: 0.5rem; right: 0.5rem">New</div>
+          {%endif%}
+          
+          {%if new_product.PRdiscount_price > 0%}
+            <div class="badge bg-success text-white position-absolute" style="top: 0.5rem; left: 0.5rem;">Sale</div>
+            <div class="badge btn btn-danger text-white position-absolute" style="top: 2.5rem; left: 0.5rem;"> - {{new_product.discount_percentage|floatformat:2}}%</div>
+          {%endif%}
+          
+          <span class="fs-1">{{new_product.PRname}}</span>
+            <div class="text-lg-center fw-bold text-dark">
+              {%if new_product.PRdiscount_price > 0 %}
+                <div class="text-lg-center fw-normal">
+                  <span class="text-dark fw-bold">{{new_product.PRdiscount_price}} EPG</span>
+                  <span class="text-decoration-line-through fw-lighter">{{new_product.PRprice}} EPG </span>
+                </div>
+              {% else %}
+                <div class="text-lg-center fw-normal"><span >{{new_product.PRprice}} EPG </span></div>
+              {%endif%}                
+            </div>
+            <button type="button" class="btn btn-dark">Dark</button>
+        </div>
+        {%endfor%}
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+
+      </div>
+    </div>
+  </div>
+
+                        
+
+
+         -->

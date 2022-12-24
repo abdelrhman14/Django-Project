@@ -1,0 +1,559 @@
+{% extends 'pages/main.html' %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="container" style='margin-top: 110 !important;'> 
+  <div class='row'>
+    <div class='col-md-12'>
+        <p class="fs-6 fw-light">
+          <a href="{% url 'home' %}" class="text-reset text-decoration-none" ><i class="bi bi-house-door"></i> Home</a>
+          <i class="bi bi-chevron-right" style='font-size:13px;'></i> {{category_name}}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <form method="GET">
+    <div class='row mt-2 mb-2 p-2'>
+      <div class='col-md-9'>
+        <p class="fs-6 fw-normal">{{category_name}} 
+          <span class="badge rounded-pill bg-secondary text-white fw-normal">{{product_count}} Items found</span></p>
+      </div> 
+ 
+        <div class="col-md-3 text-end" >
+        {{myfilter.form.order.label}}
+      {%render_field myfilter.form.order class='form-select d-inline-block w-auto' %}
+      </div>
+    </div>
+  <div class="row"> 
+    <div class="col-md-3">
+      <div class="card border-light" style="max-width: 18rem;">
+          <div class="card-body text-dark fw-normal">
+            <div class="card-title text-dark fw-normal ">Categorys</div>
+            <hr>
+            <div class="input-group input-group-sm mb-3">
+              <span class="input-group-text" id="inputGroup-sizing-sm"><i class="bi bi-search"></i></span>
+              <input type="search" class="form-control" name='search-category' placeholder="search" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+            </div>
+              
+            {%for category in category_child%}
+              <a href={{category.get_category_url}} class="text-decoration-none">
+                 <span class='text-sm-start text-dark fw-normal'>{{category.CATname}}</span>
+                  <br>
+              </a>
+            {%endfor%}
+
+          </div>
+      </div>
+
+      <div class="card border-light" style="max-width: 18rem;">
+          <div class="card-body text-dark fw-normal ">
+            <div class="card-title text-dark fw-normal ">Brands</div>
+            <hr>
+            <div class="input-group input-group-sm mb-3">
+              <span class="input-group-text" id="inputGroup-sizing-sm"><i class="bi bi-search"></i></span>
+              <input type="search" class="form-control" name='search-brand' placeholder="search" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+            </div>
+            <input type='search' name='search-brand'>
+               {% for choice in myfilter.form.brand %}
+              <label class="checkbox-block" style='display: block'>
+                {{choice.tag }}
+                {{ choice.choice_label }}
+              </label>
+            {% endfor %}
+          </div>
+      </div>
+
+            
+
+      <div class="card border-light" style="max-width: 18rem;">
+          <div class="card-body text-dark fw-normal ">
+            <div class="card-title text-dark fw-normal ">Price</div>
+            <hr>
+            <div class="row mb-3">
+              <div class="col-6">
+                <label for="Min">Min</label>
+
+                {% render_field myfilter.form.PRprice__gt class="form-control" id="inputQuantity" type="number" placeholder='$0'%}
+
+              </div>
+              <div class="col-6">
+                <label for="Max">Max</label>                
+                {% render_field myfilter.form.PRprice__lt class="form-control" id="inputQuantity" type="number" placeholder='$1,0000'%}
+              </div> 
+            </div> 
+          </div>
+        </div>
+        <button class="btn btn-dark w-100" type="submit">Apply</button>
+
+      </form>
+
+    </div> 
+      
+
+  <div class="col-md-9"> 
+    <div class="row"> 
+      {%for product in product_list%}
+      <div class="col-md-4 p-0"> 
+        <div class="card">
+          {%if product.PRnew and product.PRbestseller%}
+            <div class="badge bg-primary text-white position-absolute" style="top: 0.5rem; right: 0.5rem">New</div>
+            <div class="badge bg-secondary text-white position-absolute" style="top: 2.5rem; right: 0.5rem">Bestseller</div>
+          {% elif product.PRnew %}
+          <div class="badge bg-primary text-white position-absolute" style="top: 0.5rem; right: 0.5rem">New</div>
+          {% elif product.PRbestseller %}
+          <div class="badge bg-secondary text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Bestseller</div>
+          {%endif%}
+        
+          {%if product.PRdiscount_price > 0%}
+          <div class="badge bg-success text-white position-absolute" style="top: 0.5rem; left: 0.5rem;">Sale</div>
+          <div class="badge btn btn-danger text-white position-absolute" style="top: 2.5rem; left: 0.5rem;"> - {{product.discount_percentage|floatformat:2}}%</div>
+          {%endif%}
+  
+          {% if product.PRimage %}
+            <img src="{{product.PRimage.url}}" height="180" width="200" class="card-img"  alt="...">
+          {% else %}  
+            <img class="card-img-top" src="{% static 'images\no-image-available-icon-flat-vector-no-image-available-icon-flat-vector-illustration-132482953.webp' %}"  alt="...">
+          {% endif %}
+  
+          <div class="card-body d-flex flex-column p-2">
+            <div class="text-sm-center fw-normal">{{product.PRname}}</div>
+  
+              {%if product.PRdiscount_price > 0 %}
+                <div class="text-lg-center fw-normal">
+                  <span class="text-danger fw-bold">{{product.PRdiscount_price}} EPG</span>
+                  <span class="text-decoration-line-through fw-lighter">{{product.PRprice}} EPG </span>
+                    
+                </div>
+              {% else %}
+              <div class="text-lg-center fw-normal"><span >{{product.PRprice}} EPG </span></div>
+              {%endif%}
+
+              <div class="card-footer p-4 border-top-0 bg-transparent">
+                <a href="{{product.get_add_to_cart_url }}" class="btn btn-primary btn-md my-0 p" >
+                  Add to cart
+                  <i class="bi bi-cart2"></i>
+                </a> 
+                <a class="btn btn-outline-dark" href="{{product.get_product_details_url}}"><i class="bi bi-search-heart"></i>
+                  View</a> 
+          </div>
+        </div>
+  
+      </div>
+    </div>
+    {%endfor%}
+  </div>
+
+  
+  </div>
+
+</div>
+{% endblock content %}
+
+
+
+<!--
+
+
+  1 
+
+
+
+    2
+
+
+
+            3
+
+                       
+
+            4 
+            
+
+            5 
+
+
+    <div class="container">
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card bg-dark text-white">
+          {%if last_product.PRnew and last_product.PRbestseller%}
+              <div class="badge bg-primary text-white position-absolute" style="top: 0.5rem; right: 0.5rem">New</div>
+              <div class="badge bg-secondary text-white position-absolute" style="top: 2.5rem; right: 0.5rem">Bestseller</div>
+            {% elif last_product.PRnew %}
+            <div class="badge bg-primary text-white position-absolute" style="top: 0.5rem; right: 0.5rem">New</div>
+            {% elif last_product.PRbestseller %}
+            <div class="badge bg-secondary text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Bestseller</div>
+            {%endif%}
+          
+          {%if last_product.PRdiscount_price > 0%}
+            <div class="badge bg-success text-white position-absolute" style="top: 0.5rem; left: 0.5rem;">Sale</div>
+            <div class="badge btn btn-danger text-white position-absolute" style="top: 2.5rem; left: 0.5rem;"> - {{last_product.discount_percentage|floatformat:2}}%</div>
+          {%endif%}
+    
+    
+          {% if last_product.PRimage %}
+          <img src="{{last_product.PRimage.url}}"  alt="...">
+          {% endif %}        
+          <div class="card-img-overlay">
+            <h5 class="card-title">Card title</h5>
+            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+            <p class="card-text">Last updated 3 mins ago</p>
+          </div>
+        </div>  
+      </div>
+    </div>
+
+
+
+    <div class="row g-2">
+      <div class="col-md-3">
+        <p class="fs-6 fw-light">
+          <a href="{% url 'home' %}" class="text-reset text-decoration-none" >Home</a>
+          <i class="bi bi-chevron-right" style='font-size:13px;'></i>
+          {{category_name}}
+        </p>
+      </div>
+    </div>
+
+
+
+   <div class="row ">
+      <div class="col-md-3">
+
+        <div class="card border-light" style="max-width: 18rem;">
+          <div class="card-header">Categorys</div>
+          <div class="card-body text-dark fw-normal ">
+            <a href="#" class="text-decoration-none">
+              <span class='text-sm-start text-dark fw-normal'>Electronics<span>
+                <b class="badge bg-primary text-white float-end">120</b>
+              </a>
+          </div>
+        </div>
+
+            <div class="card border-light" style="max-width: 18rem;">
+              <div class="card-header">Related Items</div>
+              <div class="card-body text-dark fw-normal ">
+                <a href="#" class="text-decoration-none">
+                  <span class='text-sm-start text-dark fw-normal'>Electronics<span>
+                    <b class="badge bg-primary text-white float-end">120</b>
+                  </a>
+              </div>
+            </div>
+
+            <div class="card border-light" style="max-width: 18rem;">
+              <div class="card-header">Brands</div>
+              <div class="card-body text-dark fw-normal ">
+                <form class="d-flex">
+                  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                  <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+                  <label class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" value="" checked>
+                    <span class="form-check-label"> Mercedes </span>
+                    <b class="badge bg-primary text-white float-end">120</b>
+                  </label> 
+                </div>
+              </div>
+  
+  
+                <div class="card border-light" style="max-width: 18rem;">
+                  <div class="card-header">Price</div>
+                  <div class="card-body text-dark fw-normal ">
+                      <input type="range" class="form-range" min="0" max="100">
+                      <div class="row mb-3">
+                        <div class="col-6">
+                          <label for="min" class="form-label">Min</label>
+                          <input class="form-control" id="min" placeholder="$0" type="number">
+                        </div> 
+              
+                        <div class="col-6">
+                          <label for="max" class="form-label">Max</label>
+                          <input class="form-control" id="max" placeholder="$1,0000" type="number">
+                        </div> 
+                      </div> 
+                      <button class="btn btn-light w-100" type="button">Apply</button>
+                  </div>
+                </div>
+  
+        </div>   
+                {%for product in products%}
+                <div class="col-sm-3 d-flex align-items-stretch p-0">
+                  <div class="card">
+                    {%if product.PRnew and product.PRbestseller%}
+                      <div class="badge bg-primary text-white position-absolute" style="top: 0.5rem; right: 0.5rem">New</div>
+                      <div class="badge bg-secondary text-white position-absolute" style="top: 2.5rem; right: 0.5rem">Bestseller</div>
+                    {% elif product.PRnew %}
+                    <div class="badge bg-primary text-white position-absolute" style="top: 0.5rem; right: 0.5rem">New</div>
+                    {% elif product.PRbestseller %}
+                    <div class="badge bg-secondary text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Bestseller</div>
+                    {%endif%}
+                  
+                    {%if product.PRdiscount_price > 0%}
+                    <div class="badge bg-success text-white position-absolute" style="top: 0.5rem; left: 0.5rem;">Sale</div>
+                    <div class="badge btn btn-danger text-white position-absolute" style="top: 2.5rem; left: 0.5rem;"> - {{product.discount_percentage|floatformat:2}}%</div>
+                    {%endif%}
+            
+                    {% if product.PRimage %}
+                      <img src="{{product.PRimage.url}}"  alt="...">
+                    {% else %}  
+                      <img class="card-img-top" src="{% static 'images\no-image-available-icon-flat-vector-no-image-available-icon-flat-vector-illustration-132482953.webp' %}"  alt="...">
+                    {% endif %}
+            
+                    <div class="card-body d-flex flex-column p-2">
+                      <div class="text-sm-center fw-normal">{{product.PRname}}</div>
+            
+                        {%if product.PRdiscount_price > 0 %}
+                          <div class="text-lg-center fw-normal">
+                            <span class="text-danger fw-bold">{{product.PRdiscount_price}} EPG</span>
+                            <span class="text-decoration-line-through fw-lighter">{{product.PRprice}} EPG </span>
+                              
+                          </div>
+                        {% else %}
+                        <div class="text-lg-center fw-normal"><span >{{product.PRprice}} EPG </span></div>
+                        {%endif%}
+                  </div>
+            
+                  <div class="card-footer p-4 border-top-0 bg-transparent">
+                        <a class="btn btn-outline-dark" href="#"><i class="bi bi-cart2"></i>
+                          Add to cart</a>
+                        <a class="btn btn-outline-dark" href="{{product.get_product_details_url}}"><i class="bi bi-search-heart"></i>
+                          View</a>
+                    
+                  </div>
+  
+                </div>
+  
+  
+  
+        </div>
+        {%endfor%}
+  
+  
+    </div>
+  
+-->
+
+<!--
+      {% if products.has_other_pages %}  
+      <div class='container'>
+        <div class='row'>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+          {% if products.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ products.previous_page_number }}">Previous</a></li>
+          {% else %}
+            <li class="disables"></li>
+          {% endif %}
+    
+          {% for pages in products.paginator.page_range %}
+          {% if products.number == pages %}
+            <li class="page-item"><a class="page-link" href="#">{{pages}}</a></li>
+          {% else %}
+            <li class="page-item"><a class="page-link" href="?page={{pages}}">{{pages}}</a></li>
+          {% endif %}
+          {% endfor %}
+    
+          {% if products.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ products.next_page_number }}">Next</a></li>
+          {% else %}
+            <li class="disables"></li>
+          {% endif %}
+    
+        </ul>
+      </nav>
+        </div>
+      </div>
+    {% endif %}
+
+<div class='row'>
+  <div class='col-md-12'>
+      <p class="fs-6 fw-light">
+        <a href="{% url 'home' %}" class="text-reset text-decoration-none" >Home</a>
+        <i class="bi bi-chevron-right" style='font-size:13px;'></i>
+        {{category_name}}
+      </p>
+  </div>
+</div>
+
+<div class='row'>
+  <div class='col-md-12'>
+    <div class="card bg-dark text-white">
+      {%if last_product.PRnew and last_product.PRbestseller%}
+          <div class="badge bg-primary text-white position-absolute" style="top: 0.5rem; right: 0.5rem">New</div>
+          <div class="badge bg-secondary text-white position-absolute" style="top: 2.5rem; right: 0.5rem">Bestseller</div>
+        {% elif last_product.PRnew %}
+        <div class="badge bg-primary text-white position-absolute" style="top: 0.5rem; right: 0.5rem">New</div>
+        {% elif last_product.PRbestseller %}
+        <div class="badge bg-secondary text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Bestseller</div>
+        {%endif%}
+      
+      {%if last_product.PRdiscount_price > 0%}
+        <div class="badge bg-success text-white position-absolute" style="top: 0.5rem; left: 0.5rem;">Sale</div>
+        <div class="badge btn btn-danger text-white position-absolute" style="top: 2.5rem; left: 0.5rem;"> - {{last_product.discount_percentage|floatformat:2}}%</div>
+      {%endif%}
+
+
+      {% if last_product.PRimage %}
+      <img src="{{last_product.PRimage.url}}"  alt="...">
+      {% endif %}        
+      <div class="card-img-overlay">
+        <h5 class="card-title">Card title</h5>
+        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+        <p class="card-text">Last updated 3 mins ago</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class='row'>
+  <div class='col-md-9 mt-4'>
+    <p class="fs-6 fw-normal">{{category_name}} <span class="badge rounded-pill bg-secondary text-white mt-0 fw-normal">{{product_count}} Items found</span></p>
+  </div>
+  <div class='col-md-3 mt-4'>
+      <label>Sort by :</label>
+      <select class="form-select d-inline-block w-auto">
+      <option selected>Best match</option>
+      <option value="1" >Price low to high</option>
+      <option value="2">Price high to low</option>
+      <option value="3">Recommended</option>
+      <option value="4">High rated</option>
+      </select>
+</div>
+
+<div class='row mt-4 '>
+  {%for product in products%}
+    <div class="col-sm-3 d-flex align-items-stretch p-0">
+      <div class="card">
+        {%if product.PRnew and product.PRbestseller%}
+          <div class="badge bg-primary text-white position-absolute" style="top: 0.5rem; right: 0.5rem">New</div>
+          <div class="badge bg-secondary text-white position-absolute" style="top: 2.5rem; right: 0.5rem">Bestseller</div>
+        {% elif product.PRnew %}
+        <div class="badge bg-primary text-white position-absolute" style="top: 0.5rem; right: 0.5rem">New</div>
+        {% elif product.PRbestseller %}
+        <div class="badge bg-secondary text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Bestseller</div>
+        {%endif%}
+      
+      {%if product.PRdiscount_price > 0%}
+        <div class="badge bg-success text-white position-absolute" style="top: 0.5rem; left: 0.5rem;">Sale</div>
+        <div class="badge btn btn-danger text-white position-absolute" style="top: 2.5rem; left: 0.5rem;"> - {{product.discount_percentage|floatformat:2}}%</div>
+      {%endif%}
+
+        {% if product.PRimage %}
+          <img src="{{product.PRimage.url}}"  alt="...">
+        {% else %}  
+          <img class="card-img-top" src="{% static 'images\no-image-available-icon-flat-vector-no-image-available-icon-flat-vector-illustration-132482953.webp' %}"  alt="...">
+        {% endif %}
+
+        <div class="card-body d-flex flex-column p-2">
+          <div class="text-sm-center fw-normal">{{product.PRname}}</div>
+
+            {%if product.PRdiscount_price > 0 %}
+              <div class="text-lg-center fw-normal">
+                <span class="text-danger fw-bold">{{product.PRdiscount_price}} EPG</span>
+                <span class="text-decoration-line-through fw-lighter">{{product.PRprice}} EPG </span>
+                  
+              </div>
+            {% else %}
+            <div class="text-lg-center fw-normal"><span >{{product.PRprice}} EPG </span></div>
+            {%endif%}
+      </div>
+
+      <div class="card-footer p-4 border-top-0 bg-transparent">
+          <div>
+            <a class="btn btn-outline-dark" href="#"><i class="bi bi-cart2"></i>
+              Add to cart</a>
+            <a class="btn btn-outline-dark" href="{{product.get_product_details_url}}"><i class="bi bi-search-heart"></i>
+              View</a>
+          </div>
+
+      </div>
+
+  </div>
+
+</div>
+  {%endfor%}
+
+  {% if products.has_other_pages %}  
+  <div class='container'>
+    <div class='row'>
+  <nav aria-label="Page navigation example">
+    <ul class="pagination">
+      {% if products.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page={{ products.previous_page_number }}">Previous</a></li>
+      {% else %}
+        <li class="disables"></li>
+      {% endif %}
+
+      {% for pages in products.paginator.page_range %}
+      {% if products.number == pages %}
+        <li class="page-item"><a class="page-link" href="#">{{pages}}</a></li>
+      {% else %}
+        <li class="page-item"><a class="page-link" href="?page={{pages}}">{{pages}}</a></li>
+      {% endif %}
+      {% endfor %}
+
+      {% if products.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ products.next_page_number }}">Next</a></li>
+      {% else %}
+        <li class="disables"></li>
+      {% endif %}
+
+    </ul>
+  </nav>
+    </div>
+  </div>
+{% endif %}
+  
+</div>
+
+
+
+-->
+
+
+    <!--End Part 1    <div class="col-lg-9 col-md-12">
+      <img  src="{% static 'images\product1.jpg' %}" class="card-img-top" alt="...">
+        <div class="card-img-overlay">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+          <p class="card-text">Last updated 3 mins ago</p>
+        </div>
+      </div>
+    </div>
+
+
+        <div class="col-lg-9 col-md-12 pb-lg-5 mb-4">
+      <img class="card-img" src="{% static 'images\product1.jpg' %}"  alt="...">
+        <div class="card-img-overlay">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+          <p class="card-text">Last updated 3 mins ago</p>
+        </div>
+      </div>
+    </div>
+-->
+
+
+
+
+
+<div class="col-lg-4 col-md-12 mb-4">
+  <div class="card bg-white text-white">
+    <img src="{% static 'images\product2.jpg' %}" class="img-fluid" alt="sample image">
+    <div class="card-img-overlay m-2">
+      <div class="white-text flex-center text-center">
+          <div class="">
+            <h6 class="card-title"><span class="badge bg-danger">bestseller</span></h6>
+            <p class="card-text fs-2 fw-bold">The best selling products</p>
+            <p class="card-text">Watch the best selling products now!</p>
+            <a class="btn btn-danger btn-sm ">Shop Now</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>

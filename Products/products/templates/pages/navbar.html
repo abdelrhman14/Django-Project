@@ -1,0 +1,122 @@
+{% load static %}
+
+<!--Navbar 1 -->
+<nav class="navbar navbar-expand-sm navbar-dark fixed-top">
+  <div class="container">
+      <div class="collapse navbar-collapse" id="navbarsExample11">
+        <ul class="navbar-nav mr-auto" aria-labelledby="navbarDropdown">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Language
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="#">Arabic</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#">English</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">My delivery area : <spam style='color:white;'>Cairo</spam></a>
+          </li> 
+        </ul>
+
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="#">  
+              Sale on E6-Commerce  
+            </a>
+          </li>              
+          <li class="nav-item ">
+            <a class="nav-link text-align:left" aria-current="page" href="#">  
+              Blog
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="#"><i class="bi bi-telephone"></i>  
+              1 + ( 234 ) 5678 9170
+            </a>
+          </li> 
+        </ul>
+      </div>
+  </div>
+</nav>
+
+<!--end navbar 1-->
+
+<!--Navbar 2-->
+<nav class="navbar navbar-expand-md navbar-light fixed-top" >
+  <div class="container">
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav mr-auto" aria-labelledby="navbarDropdown">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Categories
+              </a>
+              
+            </li>
+            <li class="nav-item">
+              <a href="#" class="btn btn-md btn-white text-danger fs-6 fw-bold" role="button" data-bs-toggle="button" aria-pressed="true" >Everyday Deals</a>
+            </li>           
+          </ul>
+          <!--Search bar-->
+          <form method='GET'>
+          <div class="d-flex form-inputs mx-auto">
+            <input class="form-control" type="search" name='search-all' placeholder="Search any product or brands">
+            <i class="bi bi-search"></i>
+          </div>
+        </form>
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-person"></i>  Account
+              </a>
+              {% if user.is_authenticated %}
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a  class="dropdown-item" href="#" >Profile</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <a >{{ post.title }}</a>
+
+                <li><a class="dropdown-item" href="{% url 'profile' slug=user.profile.slug %}"><i class="bi bi-person"></i> My Account</a></li>
+                <li><a class="dropdown-item" href="{% url 'editprofile' slug=user.profile.slug %}"><i class="bi bi-person"></i>Edit My Account</a></li>
+                <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Change Password</a></li>
+
+                <li><a class="dropdown-item" href="#"><i class="bi bi-cart2"></i>  Order</a></li>
+                <li><a class="dropdown-item" href="#"><i class="bi bi-heart"></i>  Save Items</a></li>
+                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+              </ul>
+              {%else%}
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a  class="dropdown-item" href="{% url 'signup' %}" >Signup</a></li>
+                <li><a class="dropdown-item" href="{% url 'login' %}"><i class="bi bi-person"></i>Login</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> My Account</a></li>
+                <li><a class="dropdown-item" href="#"><i class="bi bi-cart2"></i>  Order</a></li>
+                <li><a class="dropdown-item" href="#"><i class="bi bi-heart"></i>  Save Items</a></li>
+              </ul>
+              {% endif %}
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-question-circle"></i>  Help
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="#">Help Center</a></li>
+                <li><a class="dropdown-item" href="#">Place & track order</a></li>
+                <li><a class="dropdown-item" href="#">Order cancellation</a></li>
+                <li><a class="dropdown-item" href="#">Returns & Refunds</a></li>
+                <li><a class="dropdown-item" href="#">Payment & Jumia account</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a  class="dropdown-item"href="#" ><i class="bi bi-chat-left-dots"></i>  Live Chat</a></li>
+            </li>
+          </ul>
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="{% url 'OrderSummary' %}"><i class="bi bi-cart2"></i>Cart
+            </a>
+          </li> 
+        </div>
+  </div>
+</nav>
+   
+
+
+

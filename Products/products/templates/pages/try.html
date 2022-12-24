@@ -1,0 +1,18 @@
+{% extends 'pages/main.html' %}
+{% load static %}
+{% load django_bootstrap5 %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="container" style='margin-top: 110 !important;'> 
+<form method='POST'>
+    {% csrf_token %}
+    <input type='text' name='comment'>
+    <input type='text' name='product'>
+    <input type='text' name='username'>
+
+<input type='submit'>
+</form>
+</div>
+{% endblock content %}
+
+

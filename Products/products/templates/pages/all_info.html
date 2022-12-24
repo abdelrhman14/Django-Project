@@ -1,0 +1,40 @@
+{% extends 'pages/main.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+<div class="container" style='margin-top: 110 !important;'>
+
+
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Username</th>
+            <th scope="col">Title</th>
+            <th scope="col">Details</th>
+            <th scope="col">Total Target</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for i in crowd_funding %}
+          <tr>
+            <td>{{i.user}}</td>
+            <td>{{i.title}}</td>
+            <td>{{i.details}}</td>
+            <td>{{i.total_target}}</td>
+            <td><a href="{% url 'crowd_funding' id=pk  %}" class="text-reset text-decoration-none" >Edit</a></td>
+          </tr>
+          {% endfor %}
+
+        </tbody>
+      </table>
+
+
+    
+    
+    
+
+
+</div>
+{% endblock content %}
+
+
